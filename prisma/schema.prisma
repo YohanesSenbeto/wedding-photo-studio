@@ -1,0 +1,231 @@
+// Wedding Photo Studio — Prisma schema
+// Docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+/* ------------------------------------------------------------------ */
+/* Enums                                                               */
+/* ------------------------------------------------------------------ */
+
+enum PhotoStatus {
+  UPLOADED
+  ANALYZED
+  PROCESSING
+  COMPLETED
+  FAILED
+  ARCHIVED
+}
+
+enum JobStatus {
+  QUEUED
+  CONNECTING
+  PROCESSING
+  PHOTOSHOP_OPENING
+  EDITING
+  EXPORTING
+  COMPLETED
+  FAILED
+}
+
+enum JobType {
+  EDIT_PHOTO
+  CREATE_ALBUM
+}
+
+enum OutputFormat {
+  JPG
+  TIFF
+  PSD
+}
+
+enum OutputKind {
+  EDITED
+  ALBUM_PAGE
+  TEMPLATE
+  THUMBNAIL
+}
+
+enum ColorMode {
+  RGB
+  CMYK
+}
+
+enum AgentStatus {
+  OFFLINE
+  ONLINE
+  BUSY
+}
+
+enum AlbumStatus {
+  DRAFT
+  QUEUED
+  PROCESSING
+  COMPLETED
+  FAILED
+}
+
+/* ------------------------------------------------------------------ */
+/* Models                                                              */
+/* ------------------------------------------------------------------ */
+
+model User {
+  id        String       @id @default(cuid())
+  email     String       @unique
+  name      String?
+  createdAt DateTime     @default(now())
+  updatedAt DateTime     @updatedAt
+
+  photos Photo[]
+  albums Album[]
+  jobs   EditingJob[]
+}
+
+model Photo {
+  id           String       @id @default(cuid())
+  originalName String
+  fileName     String       @unique
+  filePath     String
+  mimeType     String
+  extension    String // "jpg" | "jpeg" | "arw"
+  width        Int?
+  height       Int?
+  fileSize     Int
+  status       PhotoStatus  @default(UPLOADED)
+  userId       String?
+  user         User?        @relation(fields: [userId], references: [id], onDelete: SetNull)
+  jobs         EditingJob[]
+  outputs      OutputFile[]
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+
+  @@index([createdAt])
+  @@index([status])
+}
+
+model EditingPreset {
+  id          String       @id @default(cuid())
+  key         String       @unique // e.g. ELEGANT_WEDDING
+  name        String
+  description String       @default("")
+  params      Json // PresetParams (see @wedding/validation)
+  isBuiltIn   Boolean      @default(true)
+  jobs        EditingJob[]
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+}
+
+model EditingJob {
+  id           String         @id @default(cuid())
+  /// Stable id the agent uses to reference this job
+  agentJobId   String         @unique
+  type         JobType        @default(EDIT_PHOTO)
+  status       JobStatus      @default(QUEUED)
+  progress     Int            @default(0)
+  photoId      String?
+  photo        Photo?         @relation(fields: [photoId], references: [id], onDelete: SetNull)
+  albumId      String?
+  album        Album?         @relation(fields: [albumId], references: [id], onDelete: SetNull)
+  presetId     String?
+  preset       EditingPreset? @relation(fields: [presetId], references: [id], onDelete: SetNull)
+  agentId      String?
+  agent        Agent?         @relation(fields: [agentId], references: [id], onDelete: SetNull)
+  /// Snapshot of the payload sent to the agent
+  params       Json?
+  inputPath    String
+  outputPath   String?
+  errorMessage String?
+  errorCode    String?
+  startedAt    DateTime?
+  completedAt  DateTime?
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+  outputs      OutputFile[]
+  userId       String?
+  user         User?          @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@index([status, createdAt])
+}
+
+model Album {
+  id          String       @id @default(cuid())
+  groomName   String
+  brideName   String
+  weddingDate String // display string, e.g. "03 MAY 2026"
+  location    String
+  caption     String?
+  status      AlbumStatus  @default(DRAFT)
+  userId      String?
+  user        User?        @relation(fields: [userId], references: [id], onDelete: SetNull)
+  pages       AlbumPage[]
+  jobs        EditingJob[]
+  outputs     OutputFile[]
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+}
+
+model AlbumPage {
+  id            String      @id @default(cuid())
+  albumId       String
+  album         Album       @relation(fields: [albumId], references: [id], onDelete: Cascade)
+  order         Int
+  templateKey   String // "01_Cover" ... "12_Final_Portrait"
+  templateTitle String
+  layoutKey     String // key into LAYOUT_LIBRARY
+  caption       String?
+  photoIds      String[] // ordered photo ids for the slots
+  /// Resolved slot geometry (percent) sent to the agent
+  params        Json?
+  outputId      String?
+  output        OutputFile? @relation("PageOutput")
+
+  @@unique([albumId, order])
+}
+
+model OutputFile {
+  id          String       @id @default(cuid())
+  fileName    String
+  path        String
+  fileSize    Int
+  format      OutputFormat
+  kind        OutputKind   @default(EDITED)
+  width       Int?
+  height      Int?
+  dpi         Int?
+  colorMode   ColorMode?
+  jobId       String?
+  job         EditingJob?  @relation(fields: [jobId], references: [id], onDelete: SetNull)
+  photoId     String?
+  photo       Photo?       @relation(fields: [photoId], references: [id], onDelete: SetNull)
+  albumId     String?
+  album       Album?       @relation(fields: [albumId], references: [id], onDelete: SetNull)
+  albumPageId String?      @unique
+  albumPage   AlbumPage?   @relation("PageOutput", fields: [albumPageId], references: [id], onDelete: SetNull)
+  createdAt   DateTime     @default(now())
+
+  @@index([createdAt])
+}
+
+model Agent {
+  id                 String       @id @default(cuid())
+  name               String
+  machineName        String
+  platform           String
+  appVersion         String
+  photoshopVersion   String?
+  photoshopAvailable Boolean      @default(false)
+  photoshopMode      String       @default("COM") // COM | DRYRUN
+  status             AgentStatus  @default(OFFLINE)
+  activeJobId        String?
+  tokenHash          String // sha256 of the AGENT_TOKEN used at registration
+  jobs               EditingJob[]
+  firstSeenAt        DateTime     @default(now())
+  lastSeenAt         DateTime     @default(now())
+  updatedAt          DateTime     @updatedAt
+}

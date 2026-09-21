@@ -1,0 +1,23 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: wedding-studio-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: wedding
+      POSTGRES_PASSWORD: wedding
+      POSTGRES_DB: wedding_studio
+    ports:
+      # Host port is configurable so the stack can coexist with other local
+      # PostgreSQL instances. Keep DATABASE_URL in .env in sync when overriding.
+      - "${POSTGRES_PORT:-5432}:5432"
+    volumes:
+      - wedding_pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U wedding -d wedding_studio"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+volumes:
+  wedding_pgdata:

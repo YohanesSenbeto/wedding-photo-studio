@@ -1,0 +1,189 @@
+{
+  "name": "wedding-photo-studio",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "dev:web": "npm run dev -w @wedding/web",
+    "dev:agent": "npm run dev:agent -w @wedding/agent",
+    "agent": "npm run agent -w @wedding/agent",
+    "agent:selftest": "npm run selftest -w @wedding/agent",
+    "prisma:generate": "prisma generate --schema prisma/schema.prisma",
+    "prisma:migrate": "prisma migrate dev --schema prisma/schema.prisma",
+    "prisma:deploy": "prisma migrate deploy --schema prisma/schema.prisma",
+    "prisma:studio": "prisma studio --schema prisma/schema.prisma",
+    "db:seed": "tsx prisma/seed.ts",
+    "build": "npm run build -w @wedding/web",
+    "typecheck": "tsc -p apps/web --noEmit && tsc -p apps/photoshop-agent --noEmit && tsc -p packages/types --noEmit && tsc -p packages/validation --noEmit && tsc -p packages/config --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "prisma": {
+    "seed": "tsx prisma/seed.ts"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.2",
+    "prisma": "^6.2.1",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.2",
+    "vitest": "^2.1.8"
+  },
+  "dependencies": {
+    "@prisma/client": "^6.19.3",
+    "@wedding/config": "^0.1.0",
+    "@wedding/hooks": "^0.1.0",
+    "framer-motion": "^11.4.0",
+    "next": "^15.0.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  }
+}
+{
+  "name": "wedding-photo-studio",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "dev:web": "npm run dev -w @wedding/web",
+    "dev:agent": "npm run dev:agent -w @wedding/agent",
+    "agent": "npm run agent -w @wedding/agent",
+    "agent:selftest": "npm run selftest -w @wedding/agent",
+    "prisma:generate": "prisma generate --schema prisma/schema.prisma",
+    "prisma:migrate": "prisma migrate dev --schema prisma/schema.prisma",
+    "prisma:deploy": "prisma migrate deploy --schema prisma/schema.prisma",
+    "prisma:studio": "prisma studio --schema prisma/schema.prisma",
+    "db:seed": "tsx prisma/seed.ts",
+    "typecheck": "tsc -p apps/web --noEmit && tsc -p apps/photoshop-agent --noEmit && tsc -p packages/types --noEmit && tsc -p packages/validation --noEmit && tsc -p packages/config --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "prisma": {
+    "seed": "tsx prisma/seed.ts"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.2",
+    "prisma": "^6.2.1",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.2",
+    "vitest": "^2.1.8"
+  },
+  "dependencies": {
+    "@prisma/client": "^6.19.3",
+    "@wedding/config": "^0.1.0",
+    "@wedding/hooks": "^0.1.0",
+    "framer-motion": "^11.4.0",
+    "next": "^15.0.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  }
+}
+{"name": "wedding-photo-studio", "version": "1.0.0", "private": true, "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start"
+  },
+  "dependencies": {
+    "@wedding/config": "^0.1.0",
+    "@wedding/hooks": "^0.1.0",
+    "framer-motion": "^11.4.0",
+    "next": "^15.0.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
+  "devDependencies": {
+    "@types/react": "^18.2.18",
+    "@types/react-dom": "^18.2.7",
+    "typescript": "^5.2.2"
+  }}
+{
+  "name": "wedding-photo-studio",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start"
+  },
+  "dependencies": {
+    "@wedding/config": "^0.1.0",
+    "@wedding/hooks": "^0.1.0",
+    "framer-motion": "^11.4.0",
+    "next": "^15.0.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
+  "devDependencies": {
+    "@types/react": "^18.2.18",
+    "@types/react-dom": "^18.2.7",
+    "typescript": "^5.2.2"
+  }
+}
+{
+  "name": "wedding-photo-studio",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Professional wedding photo editing studio — Next.js web app + local Windows Photoshop 2022 automation agent",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "scripts": {
+    "dev": "npm run dev -w @wedding/web",
+    "dev:web": "npm run dev -w @wedding/web",
+    "dev:agent": "npm run dev:agent -w @wedding/agent",
+    "agent": "npm run agent -w @wedding/agent",
+    "agent:selftest": "npm run selftest -w @wedding/agent",
+    "prisma:generate": "prisma generate --schema prisma/schema.prisma",
+    "prisma:migrate": "prisma migrate dev --schema prisma/schema.prisma",
+    "prisma:deploy": "prisma migrate deploy --schema prisma/schema.prisma",
+    "prisma:studio": "prisma studio --schema prisma/schema.prisma",
+    "db:seed": "tsx prisma/seed.ts",
+    "build": "npm run build -w @wedding/web",
+    "start": "npm run start -w @wedding/web",
+    "typecheck": "tsc -p apps/web --noEmit && tsc -p apps/photoshop-agent --noEmit && tsc -p packages/types --noEmit && tsc -p packages/validation --noEmit && tsc -p packages/config --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "prisma": {
+    "seed": "tsx prisma/seed.ts"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.2",
+    "prisma": "^6.2.1",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.2",
+    "vitest": "^2.1.8"
+  },
+  "dependencies": {
+    "@prisma/client": "^6.19.3",
+    "next": "^15.5.25"
+"name": "wedding-photo-studio",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start"
+  },
+  "dependencies": {
+    "@wedding/config": "^0.1.0",
+    "@wedding/hooks": "^0.1.0",
+    "framer-motion": "^11.4.0",
+    "next": "^15.0.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
+  "devDependencies": {
+    "@types/react": "^18.2.18",
+    "@types/react-dom": "^18.2.7",
+    "typescript": "^5.2.2"
+  }
+  }
+}

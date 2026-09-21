@@ -1,0 +1,73 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 240 10% 3.5%;
+    --surface: 240 8% 6%;
+    --surface-2: 240 7% 9%;
+    --border: 240 6% 14%;
+    --foreground: 40 20% 96%;
+    --muted: 240 6% 12%;
+    --muted-foreground: 240 5% 62%;
+    --gold: 42 52% 58%;
+    --gold-soft: 42 60% 72%;
+    --accent: 42 52% 58%;
+    --success: 145 63% 45%;
+    --danger: 0 72% 56%;
+    --warning: 36 92% 56%;
+    --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+    --font-display: "Cormorant Garamond", "Playfair Display", Georgia, "Times New Roman", serif;
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  html {
+    color-scheme: dark;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+  }
+
+  ::selection {
+    @apply bg-gold/30;
+  }
+
+  /* Elegant thin scrollbars */
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: hsl(var(--surface-2)) transparent;
+  }
+  *::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  *::-webkit-scrollbar-thumb {
+    background: hsl(var(--surface-2));
+    border-radius: 4px;
+  }
+}
+
+@layer components {
+  .gold-gradient-text {
+    @apply bg-clip-text text-transparent;
+    background-image: linear-gradient(120deg, hsl(var(--gold-soft)), hsl(var(--gold)) 55%, hsl(var(--gold-soft)));
+  }
+  .skeleton {
+    @apply animate-shimmer rounded-md bg-surface-2;
+    background-image: linear-gradient(
+      90deg,
+      hsl(var(--surface-2)) 0%,
+      hsl(var(--muted)) 40%,
+      hsl(var(--surface-2)) 80%
+    );
+    background-size: 800px 100%;
+  }
+  .focus-gold {
+    @apply outline-none focus-visible:ring-2 focus-visible:ring-gold/60 focus-visible:ring-offset-2 focus-visible:ring-offset-background;
+  }
+}

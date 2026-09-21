@@ -1,0 +1,26 @@
+{
+  "name": "@wedding/agent",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Local Windows agent that drives Adobe Photoshop 2022 via ExtendScript/COM",
+  "scripts": {
+    "agent": "tsx src/index.ts",
+    "dev:agent": "tsx watch src/index.ts",
+    "selftest": "tsx src/index.ts --selftest"
+  },
+  "dependencies": {
+    "@wedding/config": "*",
+    "@wedding/types": "*",
+    "@wedding/validation": "*",
+    "ws": "^8.18.0"
+  },
+  "optionalDependencies": {
+    "winax": "^1.40.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.2",
+    "@types/ws": "^8.5.13",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.2"
+  }
+}

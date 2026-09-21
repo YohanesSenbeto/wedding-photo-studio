@@ -1,0 +1,41 @@
+# dependencies
+node_modules/
+.pnpm-store/
+
+# builds
+.next/
+out/
+dist/
+build/
+*.tsbuildinfo
+next-env.d.ts
+
+# env — secrets stay local, example files stay tracked
+.env*
+!.env.example
+
+# storage (uploaded photos / outputs)
+storage/
+apps/photoshop-agent/workspace/
+apps/photoshop-agent/generated-templates/
+
+# test coverage
+coverage/
+
+# tool caches / deploy state
+.eslintcache
+.vercel
+
+# AI assistant local state
+.kilo/
+
+# logs
+*.log
+npm-debug.log*
+
+# os / editor
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/*
+!.vscode/extensions.json
